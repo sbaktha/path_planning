@@ -150,7 +150,7 @@ link_libraries(${OCTOMAP_LIBRARIES} ${fcl_LIBRARY_DIRS} ${OMPL_LIBRARY_DIRS})
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(${PROJECT_NAME}_node src/path_planning.cpp)
 add_executable(old_path_planning src/old_path_planning.cpp)
-add_executable(traj_gen src/trajectory_generator.cpp)
+add_executable(traj_generator_new src/trajectory_generator.cpp)
 add_executable(scale src/scaling.cpp)
 add_executable(goal_transform src/goalpoint_transformer.cpp)
 add_executable(transform_pointcloud src/transform.cpp)
@@ -183,7 +183,7 @@ target_link_libraries(old_path_planning
    fcl
 )
 
-target_link_libraries(traj_gen
+target_link_libraries(traj_generator_new
    ${catkin_LIBRARIES}
 )
 
