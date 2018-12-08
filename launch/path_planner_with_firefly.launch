@@ -1,0 +1,15 @@
+<launch>
+  <!-- <arg name="pc_topic_input" default="/firefly/vi_sensor/camera_depth/depth/points"/> -->
+  
+  <include file="$(find octomap_server)/launch/octomap_tracking_server.launch">
+    <!-- <arg name="pc_topic" value="$(arg pc_topic_input)"/> -->
+  </include>
+  
+  <include file="$(find rotors_gazebo)/launch/mav_hovering_example_with_vi_sensor.launch">
+      <arg name="mav_name" value="firefly"/>
+  </include>
+<!-- 
+  <node name="traj_gen" pkg="path_planner" type="traj_gen"/> -->
+
+
+</launch>

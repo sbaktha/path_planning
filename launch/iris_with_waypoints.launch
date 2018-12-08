@@ -1,0 +1,35 @@
+<launch>
+
+	<arg name="my_model_name" default="iris_fpv_cam"/>
+	<arg name="my_world_name" value="iris_fpv_cam"/>
+<!-- ////////////////////launching iris with point cloud sensor///////////////////////////////////////////////////////  -->
+	<!-- <include file="$(find px4)/launch/mavros_posix_sitl.launch">
+		<arg name="gui" default="false"/>
+		<arg name="vehicle" value="iris"/>
+		<arg name="sdf" value="$(find mavlink_sitl_gazebo)/models/$(arg my_model_name)/$(arg my_model_name).sdf"/>
+		<arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/$(arg my_world_name).world"/>
+	</include> -->
+<!-- /////////////////////////// RIVZ config with transformation/////////////////////////////////////////////////////// -->
+		<!-- frame transformation from iris to rviz map -->
+	<!-- <node pkg="path_planner" type="tf_iris2map" name="tf_iris2map"/> -->
+		<!-- static transformation world to rviz map -->
+	<node pkg="tf" type="static_transform_publisher" name="world_broadcaster" args="0 0 0 0.5 -0.5 0.5 -0.5 map world 100" />
+		<!-- launching rviz -->
+	<node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" args="-d $(find path_planner)/launch/octo_iris.rviz" />
+
+<!-- ///////////////////////////launching octomap server/////////////////////////////////////////////////////////////// -->
+	<arg name="path" default=""/>
+	<arg name="changeIdFrame" default="/talker/changes"/>
+	<node pkg="octomap_server" type="octomap_tracking_server_node" name="octomap_talker" output="screen" args="$(arg path)">
+		<param name="resolution" value="0.02" />
+		<param name="frame_id" type="string" value="world" />
+		<param name="sensor_model/max_range" value="4.0" />
+		<param name="save_directory" value="$(optenv OCTOMAP_SAVE_DIR ./)" />
+		<param name="track_changes" value="true"/>
+		<param name="listen_changes" value="false"/>
+		<param name="topic_changes" value="/octomap_tracking_server/changeset" />
+	    <param name="change_id_frame" value="$(arg changeIdFrame)" />
+	    <param name="min_change_pub" value="0" />
+		<remap from="cloud_in" to="/camera/depth/points" />
+	</node>
+</launch>
