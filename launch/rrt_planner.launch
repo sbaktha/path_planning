@@ -9,7 +9,7 @@
     <remap from="/clicked_point" to="$(arg goal_topic)"/>
   </node> -->
 
-  <arg name="mav_name" default="iris_fpv_cam"/>
+  <arg name="mav_name" default="iris_stereocam"/>
   <arg name="world_name" default="outdoor"/>
   <arg name="enable_logging" default="false" />
   <arg name="enable_ground_truth" default="true" />
@@ -43,19 +43,19 @@
     <node name="joint_state_publisher"  pkg="joint_state_publisher" type="joint_state_publisher" />
   </group>
 
-  <!-- <node pkg="octomap_server" type="octomap_server_node" name="octomap_server"> -->
-		<!-- <param name="resolution" value="0.05" /> -->
+  <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+		<param name="resolution" value="0.05" />
 
 		<!-- fixed map frame (set to 'map' if SLAM or localization running!) -->
-		<!-- <param name="frame_id" type="string" value="odom_combined" /> -->
+		<param name="frame_id" type="string" value="odom_combined" />
 
 		<!-- maximum range to integrate (speedup!) -->
-		<!-- <param name="sensor_model/max_range" value="5.0" /> -->
+		<param name="sensor_model/max_range" value="5.0" />
 
 		<!-- data source to integrate (PointCloud2) -->
-		<!-- <remap from="cloud_in" to="/narrow_stereo/points_filtered2" /> -->
+		<remap from="cloud_in" to="/narrow_stereo/points_filtered2" />
 
-	<!-- </node> -->
+	</node>
 
   <!-- <node name="rviz" type="rviz" pkg="rviz" output="screen" args="-d $(find path_planning)/rviz/config_rrt_drone.rviz">
     <remap from="/move_base_simple/goal" to="/clicked_point"/>

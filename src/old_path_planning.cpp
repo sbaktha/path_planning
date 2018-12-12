@@ -1,5 +1,5 @@
  /*
- * Copyright 2017 Ayush Gaud 
+ * Copyright 2017 Ayush Gaud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -174,7 +174,7 @@ void plan(void)
 		msg.joint_names.clear();
 		msg.points.clear();
 		msg.joint_names.push_back("Quadcopter");
-		
+
 		for (std::size_t path_idx = 0; path_idx < pth->getStateCount (); path_idx++)
 		{
 			const ob::SE3StateSpace::StateType *se3state = pth->getState(path_idx)->as<ob::SE3StateSpace::StateType>();
@@ -214,7 +214,7 @@ void plan(void)
 		std::cout << "Smoothed Path" << std::endl;
 		path_smooth.print(std::cout);
 
-		
+
 		//Publish path as markers
 
 		visualization_msgs::Marker marker;
@@ -231,7 +231,7 @@ void plan(void)
 
             // extract the second component of the state and cast it to what we expect
 			const ob::SO3StateSpace::StateType *rot = se3state->as<ob::SO3StateSpace::StateType>(1);
-			
+
 			marker.header.frame_id = "world";
 			marker.header.stamp = ros::Time();
 			marker.ns = "path";
@@ -254,7 +254,7 @@ void plan(void)
 			marker.color.b = 0.0;
 			vis_pub.publish(marker);
 			// ros::Duration(0.1).sleep();
-			std::cout << "Published marker: " << idx << std::endl;  
+			std::cout << "Published marker: " << idx << std::endl;
 		}
 		*/
 
@@ -272,7 +272,7 @@ void octomapCallback(const octomap_msgs::Octomap &msg)
 	octomap::OcTree temp_tree(0.1);
 	temp_tree.readBinary(filename);
 	fcl::OcTree* tree = new fcl::OcTree(std::shared_ptr<const octomap::OcTree>(&temp_tree));
-	
+
 
 	// convert octree to collision object
 	// octomap::OcTree* tree_oct = dynamic_cast<octomap::OcTree*>(octomap_msgs::msgToMap(msg));

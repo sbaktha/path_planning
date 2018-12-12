@@ -123,17 +123,34 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 # include_directories(include)
+
+#set(octomap_INCLUDE_DIRS "/../octomap-1.7.2/octomap/include")
+#set(octomap_LIBRARY_DIRS "/../octomap-1.7.2/octomap/lib")
+#set(octomap_LIBRARIES
+#"/../octomap-1.7.2/octomap/lib/liboctomap.so"
+#"/../octomap-1.7.2/octomap/lib/liboctomath.so"
+#)
+
+set(fcl_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/../../install/fcl/include/fcl)
+set(fcl_LIBRARY_DIRS ${PROJECT_SOURCE_DIR}/../../install/fcl/lib)
+
+#set(fcl_LIBRARIES
+#${PROJECT_SOURCE_DIR}/../../install/fcl/lib/libfcl.so
+#${PROJECT_SOURCE_DIR}/../../install/fcl/lib/libfcl.so.0.5.0
+#${PROJECT_SOURCE_DIR}/../../install/fcl/lib/libfcl.so.0.6.0
+#)
+
 include_directories(
   ${PROJECT_SOURCE_DIR}/include
   ${catkin_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS}
-  ${OCTOMAP_INCLUDE_DIRS}
+  ${octomap_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIR}
   ${OMPL_INCLUDE_DIRS}
   ${fcl_INCLUDE_DIRS}
 )
 
-link_libraries(${OCTOMAP_LIBRARIES} ${fcl_LIBRARY_DIRS} ${OMPL_LIBRARY_DIRS})
+link_libraries(${octomap_LIBRARIES} ${fcl_LIBRARY_DIRS} ${OMPL_LIBRARY_DIRS})
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -149,7 +166,7 @@ link_libraries(${OCTOMAP_LIBRARIES} ${fcl_LIBRARY_DIRS} ${OMPL_LIBRARY_DIRS})
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(${PROJECT_NAME}_node src/path_planning.cpp)
-add_executable(old_path_planning src/old_path_planning.cpp)
+#add_executable(old_path_planning src/old_path_planning.cpp)
 add_executable(traj_generator_new src/trajectory_generator.cpp)
 add_executable(scale src/scaling.cpp)
 add_executable(goal_transform src/goalpoint_transformer.cpp)
@@ -174,14 +191,14 @@ target_link_libraries(${PROJECT_NAME}_node
    fcl
 )
 
-target_link_libraries(old_path_planning
-   ${catkin_LIBRARIES}
-   ${PCL_LIBRARIES}
-   ${OCTOMAP_LIBRARIES}
-   ${fcl_LIBRARIES}
-   ${OMPL_LIBRARIES}
-   fcl
-)
+#target_link_libraries(old_path_planning
+#   ${catkin_LIBRARIES}
+#   ${PCL_LIBRARIES}
+#   ${OCTOMAP_LIBRARIES}
+#   ${fcl_LIBRARIES}
+#   ${OMPL_LIBRARIES}
+#   fcl
+#)
 
 target_link_libraries(traj_generator_new
    ${catkin_LIBRARIES}
