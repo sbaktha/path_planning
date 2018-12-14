@@ -9,7 +9,7 @@
     <remap from="/clicked_point" to="$(arg goal_topic)"/>
   </node> -->
 
-  <arg name="mav_name" default="iris_stereocam"/>
+  <arg name="mav_name" default="iris_stereo_camera"/>
   <arg name="world_name" default="outdoor"/>
   <arg name="enable_logging" default="false" />
   <arg name="enable_ground_truth" default="true" />
@@ -27,16 +27,19 @@
   <group ns="$(arg mav_name)">
     <include file="$(find rotors_gazebo)/launch/spawn_mav.launch">
       <arg name="mav_name" value="$(arg mav_name)" />
-      <arg name="model" value="$(find rotors_description)/urdf/mav_generic_odometry_sensor.gazebo" />
+      <!-- <arg name="model" value="$(find rotors_description)/urdf/mav_generic_odometry_sensor.gazebo" /> -->
+      <arg name="model" value="iris_stereo_camera" />
       <arg name="enable_logging" value="$(arg enable_logging)" />
       <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
       <arg name="log_file" value="$(arg log_file)"/>
     </include>
+
     <node name="lee_position_controller_node" pkg="rotors_control" type="lee_position_controller_node" output="screen">
       <rosparam command="load" file="$(find rotors_gazebo)/resource/lee_controller_$(arg mav_name).yaml" />
       <rosparam command="load" file="$(find rotors_gazebo)/resource/$(arg mav_name).yaml" />
       <remap from="odometry" to="odometry_sensor1/odometry" />
     </node>
+
     <node name="hovering_example" pkg="rotors_gazebo" type="hovering_example" output="screen"/>
     <!-- <node name="waypoint_publisher_file" pkg="rotors_gazebo" type="waypoint_publisher_file" output="screen" args="$(find rotors_gazebo)/resource/example_waypoints.txt"/> -->
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
@@ -45,20 +48,28 @@
 
   <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
 		<param name="resolution" value="0.05" />
-
 		<!-- fixed map frame (set to 'map' if SLAM or localization running!) -->
 		<param name="frame_id" type="string" value="odom_combined" />
-
-		<!-- maximum range to integrate (speedup!) -->
 		<param name="sensor_model/max_range" value="5.0" />
-
-		<!-- data source to integrate (PointCloud2) -->
 		<remap from="cloud_in" to="/narrow_stereo/points_filtered2" />
-
 	</node>
 
-  <!-- <node name="rviz" type="rviz" pkg="rviz" output="screen" args="-d $(find path_planning)/rviz/config_rrt_drone.rviz">
-    <remap from="/move_base_simple/goal" to="/clicked_point"/>
-  </node> -->
+  <node name="rviz" type="rviz" pkg="rviz" output="screen" args="-d $(find path_planning)/rviz/config_rrt_drone.rviz">
+    <!-- <remap from="/move_base_simple/goal" to="/clicked_point"/> -->
+  </node>
+
+  <!-- Define a static transform from a camera internal frame to the fcu for every camera used -->
+  <node pkg="tf" type="static_transform_publisher" name="tf_depth_camera"
+          args="0 0 0 -1.57 0 -1.57 fcu camera_link 10"/>
+
+  <!-- Launch stereo_image_proc node which runs OpenCV's block matching  -->
+  <node ns="stereo" pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc">
+    <param name="stereo_algorithm" type="double" value="1.0" />
+    <param name="correlation_window_size" type="double" value="19.0" />
+    <param name="disparity_range" type="double" value="32.0" />
+    <param name="uniqueness_ratio" type="double" value="40.0" />
+    <param name="speckle_size" type="double" value="1000.0" />
+    <param name="speckle_range" type="double" value="2.0" />
+  </node>
 
 </launch>
