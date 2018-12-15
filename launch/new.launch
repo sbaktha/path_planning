@@ -1,0 +1,50 @@
+
+
+<launch>
+  <arg name="odom_topic" default="/iris/odometry_sensor1/odometry"/>
+  <arg name="octomap_topic" default="/octomap_binary"/>
+  <arg name="goal_topic" default="/move_base_simple/goal"/>
+  <arg name="pcl_topic" default="/iris/vi_sensor/camera_depth/depth/points"/>
+  <arg name="mav_name" default="iris"/>
+  <arg name="world_name" default="outdoor"/>
+
+  <include file="$(find rotors_gazebo)/launch/mav_hovering_example_with_vi_sensor.launch">
+    <arg name="mav_name" value="$(arg mav_name)" />
+    <arg name="world_name" value="$(arg world_name)"/>
+    <arg name="odom_topic" value="$(arg odom_topic)"/>
+  </include>
+
+  <include file="$(find path_planning)/launch/octomap_launcher.launch"/>
+
+  <node name="rviz" type="rviz" pkg="rviz" output="screen" args='-d $(find path_planning)/rviz/view_octomap_drone.rviz'/>
+
+  <!-- Launch stereo_image_proc node which runs OpenCV's block matching  -->
+  <!-- <node ns="stereo" pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc">
+    <param name="stereo_algorithm" type="double" value="1.0" />
+    <param name="correlation_window_size" type="double" value="19.0" />
+    <param name="disparity_range" type="double" value="32.0" />
+    <param name="uniqueness_ratio" type="double" value="40.0" />
+    <param name="speckle_size" type="double" value="1000.0" />
+    <param name="speckle_range" type="double" value="2.0" />
+  </node> -->
+
+  <!-- Launch path planner -->
+  <node pkg="path_planning" type="goal_transform" name="goal_transform_node" output="screen">
+    <!-- <remap from="/clicked_point" to="$(arg goal_topic)"/> -->
+  </node>
+
+  <node pkg="path_planning" type="path_planning_node" name="path_planning_node" output="screen">
+    <remap from="/bebop2/odometry_sensor1/odometry" to="$(arg odom_topic)"/>
+    <!-- <remap from="/clicked_point" to="$(arg goal_topic)"/> -->
+    <!-- <remap from="/octomap_binary" to="$(arg octomap_topic)"/> -->
+  </node>
+
+  <node pkg="path_planning" type="traj_generator_new" name="trajectory_generator_new" output="screen"/>
+
+  <node pkg="path_planning" type="scale" name="scaling_node" output="screen"/>
+
+  <node pkg="path_planning" type="transform_pointcloud" name="pcl_transforn_node" output="screen">
+    <remap from="/remode/rgb_pointcloud" to="$(arg pcl_topic)"/>
+  </node>
+
+</launch>

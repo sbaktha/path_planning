@@ -1,7 +1,7 @@
 <launch>
-  <!-- <arg name="odom_topic" default="/firefly/odometry_sensor1/odometry"/>
+  <arg name="odom_topic" default="/firefly/odometry_sensor1/odometry"/>
   <arg name="octomap_topic" default="/octomap"/>
-  <arg name="goal_topic" default="/simple_goal"/> -->
+  <arg name="goal_topic" default="/simple_goal"/>
 
   <!-- <node name="path_planning_node" pkg="path_planning" type="path_planning_node" output="screen">
     <remap from="/octomap_binary" to="$(arg octomap_topic)"/>

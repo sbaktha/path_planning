@@ -1,0 +1,70 @@
+<launch>
+  <arg name="odom_topic" default="/firefly/odometry_sensor1/odometry"/>
+  <arg name="octomap_topic" default="/octomap"/>
+  <arg name="goal_topic" default="/simple_goal"/>
+  <arg name="pcl_topic" default="/pcloud"/>
+
+  <arg name="world_file_name"    default="simple_obstacle" />
+  <arg name="world_path" default="$(find local_planner)/../sim/worlds/$(arg world_file_name).world" />
+  <arg name="pointcloud_topics" default="[/stereo/points2]"/>
+
+  <!-- Define a static transform from a camera internal frame to the fcu for every camera used -->
+  <node pkg="tf" type="static_transform_publisher" name="tf_depth_camera"
+          args="0 0 0 -1.57 0 -1.57 fcu camera_link 10"/>
+
+  <!-- Launch PX4 and mavros -->
+  <include file="$(find local_planner)/launch/local_planner_sitl_mavros.launch" >
+    <arg name="model" value="iris_stereo_camera" />
+    <arg name="world_path" value="$(arg world_path)" />
+  </include>
+
+  <!-- Launch stereo_image_proc node which runs OpenCV's block matching  -->
+  <node ns="stereo" pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc">
+    <param name="stereo_algorithm" type="double" value="1.0" />
+    <param name="correlation_window_size" type="double" value="19.0" />
+    <param name="disparity_range" type="double" value="32.0" />
+    <param name="uniqueness_ratio" type="double" value="40.0" />
+    <param name="speckle_size" type="double" value="1000.0" />
+    <param name="speckle_range" type="double" value="2.0" />
+  </node>
+
+  <!-- Load custom console configuration -->
+  <env name="ROSCONSOLE_CONFIG_FILE" value="$(find local_planner)/resource/custom_rosconsole.conf"/>
+  <!-- Load waypoint generator paramters -->
+  <rosparam command="load" file="$(find local_planner)/cfg/params.yaml"/>
+
+  <!-- Launch path planner -->
+  <node pkg="path_planning" type="goal_transform" name="goal_transform_node" output="screen">
+    <remap from="/clicked_point" to="$(arg goal_topic)"/>
+  </node>
+
+  <node pkg="path_planning" type="path_planning_node" name="path_planning_node" output="screen">
+    <remap from="/bebop2/odometry_sensor1/odometry" to="$(arg odom_topic)"/>
+    <remap from="/clicked_point" to="$(arg goal_topic)"/>
+    <remap from="/octomap_binary" to="$(arg octomap_topic)"/>
+  </node>
+
+  <node pkg="path_planning" type="traj_generator_new" name="trajectory_generator_new" output="screen"/>
+
+  <node pkg="path_planning" type="scale" name="scaling_node" output="screen"/>
+
+  <node pkg="path_planning" type="transform_pointcloud" name="pcl_transforn_node" output="screen">
+    <remap from="/remode/rgb_pointcloud" to="$(arg pcl_topic)"/>
+  </node>
+
+
+  <!-- Launch octomap server -->
+  <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+    <param name="resolution" value="0.05" />
+    <!-- fixed map frame (set to 'map' if SLAM or localization running!) -->
+    <param name="frame_id" type="string" value="odom_combined" />
+    <!-- maximum range to integrate (speedup!) -->
+    <param name="sensor_model/max_range" value="50.0" />
+    <!-- data source to integrate (PointCloud2) -->
+    <remap from="cloud_in" to="$(arg pcl_topic)" />
+  </node>
+
+  <!-- Launch rviz visualization -->
+  <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d $(find path_planning)/rviz/config_rrt_drone.rviz" />
+
+</launch>
