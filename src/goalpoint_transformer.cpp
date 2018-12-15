@@ -30,7 +30,7 @@ int main(int argc, char** argv){
   ros::init(argc, argv, "bebop_tf_listner");
 
   ros::NodeHandle node;
-  ros::Subscriber planner_sub = node.subscribe("/clicked_point",1, waypointCb);
+  ros::Subscriber planner_sub = node.subscribe("/clicked_point_with_elevation",1, waypointCb);
   tf::TransformListener listener;
   transformed_pub = node.advertise<geometry_msgs::PointStamped>("/transformed/clicked_point", 1);
   ros::Rate rate(10.0);
