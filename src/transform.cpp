@@ -1,5 +1,5 @@
  /*
- * Copyright 2017 Ayush Gaud 
+ * Copyright 2017 Ayush Gaud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 #include "ros/ros.h"
 #include "pcl_ros/transforms.h"
 #include "sensor_msgs/PointCloud2.h"
@@ -22,13 +22,14 @@
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_datatypes.h>
 
+std::string camera_frame="/iris/vi_sensor/camera_depth_link";
 ros::Publisher pcl_pub;
 void pclCb(const sensor_msgs::PointCloud2 &msg)
 {
 	Eigen::Matrix4f transform;
 	sensor_msgs::PointCloud2 out;
 	transform << 0,0,1,0,-1,0,0,0,0,-1,0,0,0,0,0,1; //Rotate camera optical to NEU i.e. Z -pi/2 X -pi/2
-	
+
 	tf::Transform camera_to_world;
 	camera_to_world.setBasis(tf::Matrix3x3(0,0,1,-1,0,0,0,-1,0));
 
@@ -36,12 +37,12 @@ void pclCb(const sensor_msgs::PointCloud2 &msg)
 
 	tf::TransformListener listener;
 	tf::StampedTransform transformed_frame;
-	try 
+	try
 	{
-	    listener.waitForTransform("world", "camera", ros::Time(0), ros::Duration(10.0) );
-	    listener.lookupTransform("world", "camera", ros::Time(0), transformed_frame);
-	} 
-	catch (tf::TransformException ex) 
+	    listener.waitForTransform("world", camera_frame, ros::Time(0), ros::Duration(10.0) );
+	    listener.lookupTransform("world", camera_frame, ros::Time(0), transformed_frame);
+	}
+	catch (tf::TransformException  ex)
 	{
 	    ROS_ERROR("%s",ex.what());
 	}
@@ -56,7 +57,7 @@ void pclCb(const sensor_msgs::PointCloud2 &msg)
 	}
 	else
 		ROS_ERROR("is NAN");
-	
+
 
 }
 

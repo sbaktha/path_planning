@@ -6,6 +6,8 @@
 tf::StampedTransform transform;
 ros::Publisher transformed_pub;
 bool has_transform = false;
+std::string global_frame = "world";
+std::string base_link_frame = "iris/base_link";
 
 void waypointCb(const geometry_msgs::PointStamped::ConstPtr &msg)
 {
@@ -35,7 +37,7 @@ int main(int argc, char** argv){
   while (node.ok()){
 
     try{
-      listener.lookupTransform("odom", "base_link", 
+      listener.lookupTransform(global_frame, base_link_frame,
        ros::Time(0), transform);
       ROS_INFO("Transform initialized");
       has_transform = true;
@@ -49,6 +51,6 @@ int main(int argc, char** argv){
 
     rate.sleep();
   }
-  ros::spin();  
+  ros::spin();
   return 0;
 };
