@@ -3,12 +3,12 @@
 <launch>
   <arg name="odom_topic" default="/iris/odometry_sensor1/odometry"/>
   <arg name="octomap_topic" default="/octomap_binary"/>
-  <arg name="goal_topic" default="/move_base_simple/goal"/>
+  <arg name="goal_topic" default="/clicked_point"/>
   <arg name="pcl_topic" default="/iris/vi_sensor/camera_depth/depth/points"/>
   <arg name="mav_name" default="iris"/>
   <arg name="world_name" default="outdoor"/>
 
-  <include file="$(find rotors_gazebo)/launch/mav_hovering_example_with_vi_sensor.launch">
+  <include file="$(find rotors_gazebo)/launch/mav_trajectory_follower_with_vi_sensor.launch">
     <arg name="mav_name" value="$(arg mav_name)" />
     <arg name="world_name" value="$(arg world_name)"/>
     <arg name="odom_topic" value="$(arg odom_topic)"/>
@@ -39,7 +39,7 @@
     <!-- <remap from="/octomap_binary" to="$(arg octomap_topic)"/> -->
   </node>
 
-  <node pkg="path_planning" type="traj_generator_new" name="trajectory_generator_new" output="screen"/>
+  <node pkg="path_planning" type="traj_generator_new" name="trajectory_generator_new" output="screen" respawn="true"/>
 
   <node pkg="path_planning" type="scale" name="scaling_node" output="screen"/>
 
