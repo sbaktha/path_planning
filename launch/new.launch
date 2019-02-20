@@ -1,12 +1,10 @@
-
-
 <launch>
   <arg name="odom_topic" default="/iris/odometry_sensor1/odometry"/>
   <arg name="octomap_topic" default="/octomap_binary"/>
   <arg name="goal_topic" default="/clicked_point_with_elevation"/>
   <arg name="pcl_topic" default="/iris/vi_sensor/camera_depth/depth/points"/>
   <arg name="mav_name" default="iris"/>
-  <arg name="world_name" default="outdoor"/>
+  <arg name="world_name" default="boxes1"/>
 
   <include file="$(find rotors_gazebo)/launch/mav_trajectory_follower_with_vi_sensor.launch">
     <arg name="mav_name" value="$(arg mav_name)" />
@@ -30,6 +28,7 @@
   </node> -->
 
   <!-- Launch path planner -->
+  <node pkg="path_planning" type="goal_shifter" name="goal_elevator" output="screen"/>
   <node pkg="path_planning" type="goal_transform" name="goal_transform_node" output="screen">
     <remap from="/clicked_point" to="$(arg goal_topic)"/>
   </node>
