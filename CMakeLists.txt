@@ -4,6 +4,9 @@ set (CMAKE_CXX_STANDARD 11)
 ## Add support for C++11, supported in ROS Kinetic and newer
 # add_definitions(-std=c++11)
 
+set(fcl_DIR "../../lib/fcl-0.5.0/build")
+
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -131,8 +134,8 @@ catkin_package(
 #"/../octomap-1.7.2/octomap/lib/liboctomath.so"
 #)
 
-set(fcl_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/../../install/fcl/include/fcl)
-set(fcl_LIBRARY_DIRS ${PROJECT_SOURCE_DIR}/../../install/fcl/lib)
+set(fcl_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/../../install/fcl/include/fcl ${PROJECT_SOURCE_DIR}/../../lib/fcl-0.5.0/include/fcl)
+set(fcl_LIBRARY_DIRS ${PROJECT_SOURCE_DIR}/../../install/fcl/lib ${PROJECT_SOURCE_DIR}/../../lib/fcl-0.5.0/build/lib)
 
 #set(fcl_LIBRARIES
 #${PROJECT_SOURCE_DIR}/../../install/fcl/lib/libfcl.so
