@@ -134,8 +134,8 @@ catkin_package(
 #"/../octomap-1.7.2/octomap/lib/liboctomath.so"
 #)
 
-set(fcl_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/../../install/fcl/include/fcl ${PROJECT_SOURCE_DIR}/../../lib/fcl-0.5.0/include/fcl)
-set(fcl_LIBRARY_DIRS ${PROJECT_SOURCE_DIR}/../../install/fcl/lib ${PROJECT_SOURCE_DIR}/../../lib/fcl-0.5.0/build/lib)
+#set(fcl_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/../../install/fcl/include/fcl ${PROJECT_SOURCE_DIR}/../../lib/fcl-0.5.0/include/fcl)
+#set(fcl_LIBRARY_DIRS ${PROJECT_SOURCE_DIR}/../../install/fcl/lib ${PROJECT_SOURCE_DIR}/../../lib/fcl-0.5.0/build/lib)
 
 #set(fcl_LIBRARIES
 #${PROJECT_SOURCE_DIR}/../../install/fcl/lib/libfcl.so
