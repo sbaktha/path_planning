@@ -194,6 +194,7 @@ target_link_libraries(${PROJECT_NAME}_node
    ${fcl_LIBRARIES}
    ${OMPL_LIBRARIES}
    fcl
+   ompl
 )
 
 #target_link_libraries(old_path_planning
@@ -207,22 +208,52 @@ target_link_libraries(${PROJECT_NAME}_node
 
 target_link_libraries(traj_generator_new
    ${catkin_LIBRARIES}
+   ${PCL_LIBRARIES}
+   ${OCTOMAP_LIBRARIES}
+   ${fcl_LIBRARIES}
+   ${OMPL_LIBRARIES}
+   fcl
+   ompl
 )
 
 target_link_libraries(scale
    ${catkin_LIBRARIES}
+   ${PCL_LIBRARIES}
+   ${OCTOMAP_LIBRARIES}
+   ${fcl_LIBRARIES}
+   ${OMPL_LIBRARIES}
+   fcl
+   ompl
 )
 
 target_link_libraries(goal_transform
    ${catkin_LIBRARIES}
+   ${PCL_LIBRARIES}
+   ${OCTOMAP_LIBRARIES}
+   ${fcl_LIBRARIES}
+   ${OMPL_LIBRARIES}
+   fcl
+   ompl
 )
 
 target_link_libraries(transform_pointcloud
    ${catkin_LIBRARIES}
+   ${PCL_LIBRARIES}
+   ${OCTOMAP_LIBRARIES}
+   ${fcl_LIBRARIES}
+   ${OMPL_LIBRARIES}
+   fcl
+   ompl
 )
 
 target_link_libraries(goal_shifter
    ${catkin_LIBRARIES}
+   ${PCL_LIBRARIES}
+   ${OCTOMAP_LIBRARIES}
+   ${fcl_LIBRARIES}
+   ${OMPL_LIBRARIES}
+   fcl
+   ompl
 )
 
 #############

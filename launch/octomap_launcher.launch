@@ -25,7 +25,7 @@
 		<param name="track_changes" value="true"/>
 		<param name="listen_changes" value="false"/>
 		<param name="topic_changes" value="/octomap_tracking_server/changeset" />
-    <param name="change_id_frame" value="$(arg changeIdFrame)" />
+    <!-- <param name="change_id_frame" value="$(arg changeIdFrame)" /> -->
     <param name="min_change_pub" value="0" />
 <!--		<remap from="cloud_in" to="/iris/vi_sensor/camera_depth/depth/points"/> -->
 		<remap from="cloud_in" to="/zed/zed_node/point_cloud/cloud_registered"/>

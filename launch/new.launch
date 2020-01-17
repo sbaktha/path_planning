@@ -4,7 +4,7 @@
   <arg name="goal_topic" default="/clicked_point_with_elevation"/>
   <arg name="pcl_topic" default="/iris/vi_sensor/camera_depth/depth/points"/>
   <arg name="mav_name" default="iris"/>
-  <arg name="world_name" default="boxes1"/>
+  <arg name="world_name" default="outdoor"/>
 
   <include file="$(find rotors_gazebo)/launch/mav_trajectory_follower_with_vi_sensor.launch">
     <arg name="mav_name" value="$(arg mav_name)" />
